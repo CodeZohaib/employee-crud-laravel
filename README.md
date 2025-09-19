@@ -16,5 +16,3 @@ It is a simple **Employee Management System** built with **Laravel 12** and **Bo
 - **Backend:** Laravel 12, PHP 8+
 - **Frontend:** Bootstrap 4, jQuery, HTML5, CSS3
 - **Database:** MySQL / MariaDB
-
-## 📂 Project Structure
