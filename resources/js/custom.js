@@ -1,4 +1,7 @@
 $(document).ready(function(){
+
+	 console.log("✅ Custom.js Loaded");
+
 	// Activate tooltip
 	$('[data-toggle="tooltip"]').tooltip();
 	
@@ -20,4 +23,6 @@ $(document).ready(function(){
 			$("#selectAll").prop("checked", false);
 		}
 	});
+
+	
 });
