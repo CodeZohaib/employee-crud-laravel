@@ -21,7 +21,8 @@
 
 					<div class="form-group">
 						<label>Address</label>
-						<textarea class="form-control" name="emp_address" placeholder="Enter Address...!"></textarea>
+						<x-textarea name="emp_address" class="my-custom-class" placeholder="Enter Address...!" />
+
 					</div>
 
 					<div class="form-group">
@@ -31,28 +32,23 @@
 
 					<!-- Gender Field -->
 					<div class="form-group">
-						<label>Gender</label><br>
-						<div class="form-check form-check-inline">
-							<x-input class="form-check-input" type="radio" name="gender" id="male" value="Male" />
-							<label class="form-check-label" for="male">&nbsp;&nbsp;Male</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<x-input class="form-check-input" type="radio" name="gender" id="female" value="Female" />
-							<label class="form-check-label" for="female">&nbsp;&nbsp;Female</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<x-input class="form-check-input" type="radio" name="gender" id="other" value="Other" />
-							<label class="form-check-label" for="other">&nbsp;&nbsp;Other</label>
-						</div>
+						<x-radio-group 
+							name="emp_gender" 
+							label="Gender"
+							:options="['Male', 'Female', 'Other']"
+							selected="Male"
+					    />
 					</div>
 
 					<!-- Position Field -->
 					<x-select-field 
-							name="position" 
-							label="Position" 
-							:options="config('constants.positions')" 
-							selected="{{ old('position') }}"
-						/>
+						name="emp_position" 
+						label="Position" 
+						:options="config('constants.positions')" 
+						selected="{{ old('emp_position') }}" 
+					/>
+
+
 
 					<!-- Profile Picture Upload -->
 					<div class="form-group">
@@ -61,8 +57,8 @@
 				</div>
 
 				<div class="modal-footer">
-					<x-input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
-					<x-input type="submit" class="btn btn-success" value="Add" />
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+					<input type="submit" class="btn btn-success" value="Add" />
 				</div>
 			</form>
 		</div>

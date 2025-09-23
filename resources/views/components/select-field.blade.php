@@ -1,3 +1,5 @@
+@props(['name', 'label', 'options' => [], 'selected' => null])
+
 <div class="mb-4">
     @if($label)
         <label for="{{ $name }}" class="block text-sm font-medium mb-1">
@@ -6,7 +8,7 @@
     @endif
 
     <select name="{{ $name }}" id="{{ $name }}" 
-        {{ $attributes->merge(['class' => 'form-control']) }}>
+        {{ $attributes->merge(['class' => 'form-control ' . ($errors->has($name) ? 'is-invalid' : '')]) }}>
         <option value="">Select {{ $label }}</option>
 
         @foreach($options as $option)
@@ -17,7 +19,9 @@
         @endforeach
     </select>
 
-    @error($name)
-        <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
-    @enderror
+    <span class="text-danger">
+        @error($name)
+            {{ $message }}
+        @enderror 
+    </span>
 </div>
