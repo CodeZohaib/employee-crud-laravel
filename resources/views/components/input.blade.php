@@ -1,5 +1,5 @@
 <div>
-    <input 
+    <input  value="{{  (old($attributes->get('name')) ) }}"
     {{ $attributes->merge([
         'class' => 'form-control ' . ($errors->has($attributes->get('name')) ? 'is-invalid' : '')
     ]) }}

@@ -1,4 +1,3 @@
-@props(['name', 'label', 'options' => [], 'selected' => null])
 
 <div class="mb-4">
     @if($label)

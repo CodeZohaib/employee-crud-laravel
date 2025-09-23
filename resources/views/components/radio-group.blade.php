@@ -1,10 +1,3 @@
-@props([
-    'name',            // name attribute
-    'label' => '',     // label text
-    'options' => [],   // array of options ['Male','Female','Other']
-    'selected' => null // selected value (optional)
-])
-
 <div class="form-group">
     @if($label)
         <label>{{ $label }}</label><br>
