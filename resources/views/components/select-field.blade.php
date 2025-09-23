@@ -18,7 +18,7 @@
         @endforeach
     </select>
 
-    <span class="text-danger">
+    <span class="text-danger" id="{{ $errorName }}-error-{{ $name }}">
         @error($name)
             {{ $message }}
         @enderror 

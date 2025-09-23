@@ -12,16 +12,18 @@ class SelectField extends Component
     public string $label;
     public array $options;
     public string|null $selected;
+    public $errorName;
 
     /**
      * Create a new component instance.
      */
-    public function __construct(string $name, string $label = '', array $options = [], string $selected = null)
+    public function __construct(string $name, string $label = '', array $options = [], ?string $selected = null, $errorName=null)
     {
         $this->name = $name;
         $this->label = $label;
         $this->options = $options;
         $this->selected = $selected;
+        $this->errorName=$errorName;
     }
 
     /**

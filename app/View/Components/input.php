@@ -8,12 +8,15 @@ use Illuminate\View\Component;
 
 class input extends Component
 {
+     public $errorName;
     /**
      * Create a new component instance.
      */
-    public function __construct()
+    public function __construct($errorName=null)
     {
-        //
+        
+       $this->errorName=$errorName;
+       
     }
 
     /**

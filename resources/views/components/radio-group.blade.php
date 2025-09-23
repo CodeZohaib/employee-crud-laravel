@@ -24,7 +24,7 @@
 
     {{-- Error message ko sirf ek dafa show karo --}}
     @if($errors->has($name))
-        <span class="text-danger d-block">
+        <span class="text-danger d-block" id="{{ $errorName }}-error-{{ $name }}">
             {{ $errors->first($name) }}
         </span>
     @endif

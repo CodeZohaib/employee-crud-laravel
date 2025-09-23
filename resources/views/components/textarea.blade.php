@@ -5,6 +5,7 @@
     'placeholder' => '',
     'rows' => 2,
     'required' => false,
+    'errorName' => null,
 ])
 
 <div class="mb-4">
@@ -23,9 +24,11 @@
         {{ $attributes->merge(['class' => 'form-control ' . ($errors->has($name) ? 'is-invalid' : '')]) }}
     >{{ old($name, $value) }}</textarea>
 
-    @if($errors->has($name))
-        <div class="text-danger small mt-1">
-            {{ $errors->first($name) }}
+   
+        <div class="text-danger small mt-1" id="{{ $errorName }}-error-{{ $name }}">
+             @if($errors->has($name))
+               {{ $errors->first($name) }}
+             @endif
         </div>
-    @endif
+   
 </div>

@@ -8,7 +8,7 @@
            {{ $required ? 'required' : '' }}
            {{ $attributes }} />
 
-    @error($name)
-        <div class="text-danger small">{{ $message }}</div>
-    @enderror
+  
+        <div class="text-danger small" id="{{ $errorName }}-error-{{ $name}}"></div>
+    
 </div>

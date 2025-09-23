@@ -2,8 +2,10 @@
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form action="{{ route('employee.store') }}" method="POST" enctype="multipart/form-data">
+			
+			<form id="addEmployeeForm" action="{{ route('employee.store') }}" method="POST" enctype="multipart/form-data">
 				@csrf
+
 				<div class="modal-header">						
 					<h4 class="modal-title">Add Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -11,23 +13,23 @@
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Name</label>
-						<x-input type="text" name="emp_name" class="form-control" placeholder="Ente Employee Name....!"  />
+						<x-input type="text"  :errorName="'addEmployee'" name="emp_name" class="form-control" placeholder="Ente Employee Name....!"  />
 					</div>
 
 					<div class="form-group">
 						<label>Email</label>
-						<x-input type="email" name="emp_email" class="form-control" placeholder="Enter Employee Email....!" />
+						<x-input type="email" :errorName="'addEmployee'" name="emp_email" class="form-control" placeholder="Enter Employee Email....!" />
 					</div>
 
 					<div class="form-group">
 						<label>Address</label>
-						<x-textarea name="emp_address" class="my-custom-class" placeholder="Enter Address...!" />
+						<x-textarea name="emp_address" :errorName="'addEmployee'" class="my-custom-class" placeholder="Enter Address...!" />
 
 					</div>
 
 					<div class="form-group">
 						<label>Phone</label>
-						<x-input type="text" name="emp_phone" class="form-control" placeholder="Enter Phone Number.....!" />
+						<x-input type="text" :errorName="'addEmployee'" name="emp_phone" class="form-control" placeholder="Enter Phone Number.....!" />
 					</div>
 
 					<!-- Gender Field -->
@@ -37,6 +39,7 @@
 							label="Gender"
 							:options="['Male', 'Female', 'Other']"
 							selected="Male"
+							:errorName="'addEmployee'"
 					    />
 					</div>
 
@@ -46,17 +49,22 @@
 						label="Position" 
 						:options="config('constants.positions')" 
 						selected="{{ old('emp_position') }}" 
+						:errorName="'addEmployee'"
 					/>
 
 
 
 					<!-- Profile Picture Upload -->
 					<div class="form-group">
-						<x-file-upload name="profile_picture" label="Profile Picture" />
+						<x-file-upload name="profile_picture" label="Profile Picture" :errorName="'addEmployee'" />
 					</div>
+				</div>
+				<div id="addEmployeeAlert">
+							{{-- Alert will show here --}}
 				</div>
 
 				<div class="modal-footer">
+					 
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
 					<input type="submit" class="btn btn-success" value="Add" />
 				</div>

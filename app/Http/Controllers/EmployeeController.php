@@ -28,7 +28,7 @@ class EmployeeController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(StoreEmployeeRequest $request)
-    {
+    {       
          if($request->hasFile('profile_picture'))
          {
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
@@ -43,7 +43,11 @@ class EmployeeController extends Controller
                 'profile_pic_path' => $path
             ]);
 
-            return redirect()->back()->with('success', 'Employee created successfully with profile picture!');
+            // JSON response for AJAX
+            return response()->json([
+                'success' => true,
+                'message' => 'Employee created successfully!',
+            ]);
          }
     }
 
