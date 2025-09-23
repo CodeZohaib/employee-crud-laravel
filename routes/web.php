@@ -8,4 +8,4 @@ Route::get('/', function () {
 });
 
 
-Route::resource('employee',EmployeeController::class);
+Route::resource('employee', EmployeeController::class);

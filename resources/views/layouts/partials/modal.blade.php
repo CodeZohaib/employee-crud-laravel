@@ -1,8 +1,9 @@
-<!-- Edit Modal HTML -->
+<!-- add Modal HTML -->
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form action="{{ route('employee.store') }}" method="POST" enctype="multipart/form-data">
+				@csrf
 				<div class="modal-header">						
 					<h4 class="modal-title">Add Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
@@ -10,24 +11,58 @@
 				<div class="modal-body">					
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" class="form-control" required>
+						<x-input type="text" name="emp_name" class="form-control" placeholder="Ente Employee Name....!"  />
 					</div>
+
 					<div class="form-group">
 						<label>Email</label>
-						<input type="email" class="form-control" required>
+						<x-input type="email" name="emp_email" class="form-control" placeholder="Enter Employee Email....!" />
 					</div>
+
 					<div class="form-group">
 						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<textarea class="form-control" name="emp_address" placeholder="Enter Address...!"></textarea>
 					</div>
+
 					<div class="form-group">
 						<label>Phone</label>
-						<input type="text" class="form-control" required>
-					</div>					
+						<x-input type="text" name="emp_phone" class="form-control" placeholder="Enter Phone Number.....!" />
+					</div>
+
+					<!-- Gender Field -->
+					<div class="form-group">
+						<label>Gender</label><br>
+						<div class="form-check form-check-inline">
+							<x-input class="form-check-input" type="radio" name="gender" id="male" value="Male" />
+							<label class="form-check-label" for="male">&nbsp;&nbsp;Male</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<x-input class="form-check-input" type="radio" name="gender" id="female" value="Female" />
+							<label class="form-check-label" for="female">&nbsp;&nbsp;Female</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<x-input class="form-check-input" type="radio" name="gender" id="other" value="Other" />
+							<label class="form-check-label" for="other">&nbsp;&nbsp;Other</label>
+						</div>
+					</div>
+
+					<!-- Position Field -->
+					<x-select-field 
+							name="position" 
+							label="Position" 
+							:options="config('constants.positions')" 
+							selected="{{ old('position') }}"
+						/>
+
+					<!-- Profile Picture Upload -->
+					<div class="form-group">
+						<x-file-upload name="profile_picture" label="Profile Picture" />
+					</div>
 				</div>
+
 				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-success" value="Add">
+					<x-input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+					<x-input type="submit" class="btn btn-success" value="Add" />
 				</div>
 			</form>
 		</div>
@@ -47,18 +82,57 @@
 						<label>Name</label>
 						<input type="text" class="form-control" required>
 					</div>
+
 					<div class="form-group">
 						<label>Email</label>
 						<input type="email" class="form-control" required>
 					</div>
+
 					<div class="form-group">
 						<label>Address</label>
 						<textarea class="form-control" required></textarea>
 					</div>
+
 					<div class="form-group">
 						<label>Phone</label>
 						<input type="text" class="form-control" required>
-					</div>					
+					</div>
+
+					<!-- Gender Field -->
+					<div class="form-group">
+						<label>Gender</label><br>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
+							<label class="form-check-label" for="male">Male</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="gender" id="female" value="Female">
+							<label class="form-check-label" for="female">Female</label>
+						</div>
+						<div class="form-check form-check-inline">
+							<input class="form-check-input" type="radio" name="gender" id="other" value="Other">
+							<label class="form-check-label" for="other">Other</label>
+						</div>
+					</div>
+
+					<!-- Position Field -->
+					<div class="form-group">
+						<label>Position</label>
+						<select class="form-control" required>
+							<option value="">Select Position</option>
+							<option value="Manager">Manager</option>
+							<option value="Developer">Developer</option>
+							<option value="Designer">Designer</option>
+							<option value="Sales">Sales</option>
+							<option value="Other">Other</option>
+						</select>
+					</div>
+
+					<!-- Profile Picture Upload -->
+					<div class="form-group">
+						<label>Profile Picture</label>
+						<input type="file" class="form-control" accept="image/*" required>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
