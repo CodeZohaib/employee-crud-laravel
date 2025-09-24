@@ -19,6 +19,9 @@
 					</div>
 				</div>
 			</div>
+			<?php //dd($employeeData) ?>
+			@if(!empty($employeeData))
+				
 			<table class="table table-striped table-hover">
 				<thead>
 					<tr>
@@ -36,6 +39,8 @@
 					</tr>
 				</thead>
 				<tbody>
+					@foreach ($employeeData as $employee)
+					
 					<tr>
 						<td>
 							<span class="custom-checkbox">
@@ -43,93 +48,28 @@
 								<label for="checkbox1"></label>
 							</span>
 						</td>
-						<td>Thomas Hardy</td>
-						<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="6a1e0205070b19020b180e132a070b030644090507">[email&#160;protected]</a></td>
-						<td>89 Chiaroscuro Rd, Portland, USA</td>
-						<td>(171) 555-2222</td>
+						<td>{{ $employee->full_name }}</td>
+						<td>{{ $employee->email }}</td>
+						<td>{{ $employee->address }}</td>
+						<td>{{ $employee->phone_no }}</td>
 						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#editEmployeeModal" edit="{{ encrypt($employee->id) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteEmployeeModal"  delete="{{ encrypt($employee->id) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox2" name="options[]" value="1">
-								<label for="checkbox2"></label>
-							</span>
-						</td>
-						<td>Dominique Perrier</td>
-						<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a6c2c9cbcfc8cfd7d3c3d6c3d4d4cfc3d4e6cbc7cfca88c5c9cb">[email&#160;protected]</a></td>
-						<td>Obere Str. 57, Berlin, Germany</td>
-						<td>(313) 555-5735</td>
-						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox3" name="options[]" value="1">
-								<label for="checkbox3"></label>
-							</span>
-						</td>
-						<td>Maria Anders</td>
-						<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2e434f5c474f4f404a4b5c5d6e434f4742004d4143">[email&#160;protected]</a></td>
-						<td>25, rue Lauriston, Paris, France</td>
-						<td>(503) 555-9931</td>
-						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox4" name="options[]" value="1">
-								<label for="checkbox4"></label>
-							</span>
-						</td>
-						<td>Fran Wilson</td>
-						<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="1d7b6f7c736a74716e72735d707c7471337e7270">[email&#160;protected]</a></td>
-						<td>C/ Araquil, 67, Madrid, Spain</td>
-						<td>(204) 619-5731</td>
-						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr>					
-					<tr>
-						<td>
-							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox5" name="options[]" value="1">
-								<label for="checkbox5"></label>
-							</span>
-						</td>
-						<td>Martin Blank</td>
-						<td><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="9df0fcefe9f4f3fff1fcf3f6ddf0fcf4f1b3fef2f0">[email&#160;protected]</a></td>
-						<td>Via Monte Bianco 34, Turin, Italy</td>
-						<td>(480) 631-2097</td>
-						<td>
-							<a href="#editEmployeeModal" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
-						</td>
-					</tr> 
+					
+					@endforeach
 				</tbody>
 			</table>
 			<div class="clearfix">
-				<div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div>
-				<ul class="pagination">
-					<li class="page-item disabled"><a href="#">Previous</a></li>
-					<li class="page-item"><a href="#" class="page-link">1</a></li>
-					<li class="page-item"><a href="#" class="page-link">2</a></li>
-					<li class="page-item active"><a href="#" class="page-link">3</a></li>
-					<li class="page-item"><a href="#" class="page-link">4</a></li>
-					<li class="page-item"><a href="#" class="page-link">5</a></li>
-					<li class="page-item"><a href="#" class="page-link">Next</a></li>
-				</ul>
+				<div class="hint-text">
+					Showing <b>{{ $employeeData->count() }}</b> out of <b>{{ $employeeData->total() }}</b> entries
+				</div>
+				{{ $employeeData->links('pagination::bootstrap-4') }}
 			</div>
+			@else
+				<div class="alert alert-danger"><center>Employee Not Created.....!</center></div>
+			@endif
 		</div>
 	</div>        
 </div>

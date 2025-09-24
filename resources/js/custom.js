@@ -10,6 +10,7 @@ $(document).ready(function(){
 	$("#selectAll").click(function(){
 		if(this.checked){
 			checkbox.each(function(){
+				
 				this.checked = true;                        
 			});
 		} else{
@@ -20,6 +21,7 @@ $(document).ready(function(){
 	});
 	checkbox.click(function(){
 		if(!this.checked){
+			
 			$("#selectAll").prop("checked", false);
 		}
 	});

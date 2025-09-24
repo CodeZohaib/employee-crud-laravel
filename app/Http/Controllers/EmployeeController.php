@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Models\Employee;
+use Illuminate\Support\Facades\DB;
+use APP\Http\Helpers\helpers;
 
 class EmployeeController extends Controller
 {
@@ -13,7 +15,9 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        return view('allemployees');
+        $employeeData=Employee::orderby('id','desc')->paginate(5); 
+        return view('allemployees',compact('employeeData')); 
+        
     }
 
     /**
