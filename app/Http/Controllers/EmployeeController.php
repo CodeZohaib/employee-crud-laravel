@@ -86,4 +86,100 @@ class EmployeeController extends Controller
     {
         //
     }
+
+    public function destroyMultiRecord()
+    {
+        if(isset($_POST['deleteID']))
+        {
+            $deleteIDEncrypt = json_decode($_POST['deleteID'], true);
+
+            if(empty($deleteIDEncrypt) || !is_array($deleteIDEncrypt))
+            {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Please select at least one employee to delete.',
+                ]);
+            }
+
+            $deleteIDDecrypt = [];
+            $invalidUserNo = [];
+            $deleteUserNo=[];
+
+            foreach ($deleteIDEncrypt as $key => $value) 
+            {
+                try 
+                {
+                    $id = secure_decrypt($value);
+                    if ($id == null || !is_numeric($id)) 
+                    {
+                        $invalidUserNo[] = $key+1;
+                        continue;
+                    }
+
+                    $employeeExists=Employee::find($id);
+                    if(!$employeeExists)
+                    {
+                        $invalidUserNo[] = $key+1;
+                        continue;
+                    }
+
+                    $deleteIDDecrypt[] = $id;
+                    $deleteUserNo[] = $key + 1;
+                 }
+                catch (\Exception $e)
+                {
+                    $invalidUserNo[] = $key+1;
+                }
+            }
+            
+         
+            if (!empty($deleteIDDecrypt)) {
+                Employee::whereIn('id', $deleteIDDecrypt)->delete();
+            }
+
+            // ✅ Build Response Message
+            $messageParts = [];
+
+           
+
+            if (!empty($deleteUserNo) && is_array($deleteIDDecrypt)) 
+            {
+                if(count($deleteUserNo)===1 && count($invalidUserNo)===0)
+                {
+                    $messageParts[] = "<span style='color:green'>Employee Deleted successfully.</span>";
+                }
+                else
+                {
+                     $messageParts[] = "<span style='color:green'>Employee # " .implode(', ', $deleteUserNo) . " deleted successfully.</span>";
+                }
+            }
+
+            if (!empty($invalidUserNo)) 
+            {
+                if(count($invalidUserNo)===1 && count($deleteUserNo)===0)
+                {
+                    $messageParts[]= "<span style='color:red'>Employee could not be deleted (invalid).</span>";
+                }
+                else
+                {
+                    $messageParts[]= "<br><span style='color:red'>Employee # " .implode(', ', $invalidUserNo) ." could not be deleted (invalid).</span>";
+                }
+                
+            }
+
+            return response()->json([
+                'status' => 'success',
+                'message' => implode(' ', $messageParts),
+                'deleted_users' => $deleteUserNo,
+                'invalid_users' => $invalidUserNo,
+            ]);
+            
+        }
+
+        return response()->json([
+          'status' => 'error',
+          'message' => 'Request missing deleteID parameter.'
+        ], 400);
+        
+    }
 }

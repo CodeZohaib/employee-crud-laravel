@@ -9,3 +9,4 @@ Route::get('/', function () {
 
 
 Route::resource('employee', EmployeeController::class);
+Route::post('/delete-multiple-employee', [EmployeeController::class, 'destroyMultiRecord'])->name('employee.deleteMultiple');

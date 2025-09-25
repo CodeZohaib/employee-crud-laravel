@@ -3,15 +3,15 @@
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Contracts\Encryption\DecryptException;
 
-if (!function_exists('encrypt')) {
-    function encrypt($value)
+if (!function_exists('secure_encrypt')) {
+    function secure_encrypt($value)
     {
         return Crypt::encryptString($value);
     }
 }
 
-if (!function_exists('decrypt')) {
-    function decrypt($value)
+if (!function_exists('secure_decrypt')) {
+    function secure_decrypt($value)
     {
         try {
             return Crypt::decryptString($value);

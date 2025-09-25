@@ -15,7 +15,7 @@
 					</div>
 					<div class="col-sm-6">
 						<a href="#addEmployeeModal" id="employeeModalbtn" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-						<a href="#deleteEmployeeModal" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
+						<a href="#deleteEmployeeModal" id="deleteEmployeeModalbtn" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
 					</div>
 				</div>
 			</div>
@@ -39,12 +39,13 @@
 					</tr>
 				</thead>
 				<tbody>
+					@php $count=0; @endphp
 					@foreach ($employeeData as $employee)
-					
+					@php $count++; @endphp
 					<tr>
 						<td>
 							<span class="custom-checkbox">
-								<input type="checkbox" id="checkbox1" name="options[]" value="1">
+								<input type="checkbox"  class="checkbox{{ $count }}" name="options[]" value="{{ secure_encrypt($employee->id) }}">
 								<label for="checkbox1"></label>
 							</span>
 						</td>
@@ -53,8 +54,8 @@
 						<td>{{ $employee->address }}</td>
 						<td>{{ $employee->phone_no }}</td>
 						<td>
-							<a href="#editEmployeeModal" edit="{{ encrypt($employee->id) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal"  delete="{{ encrypt($employee->id) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#editEmployeeModal" edit="{{ secure_encrypt($employee->id) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
+							<a href="#deleteEmployeeModal"  delete="{{ secure_encrypt($employee->id) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						</td>
 					</tr>
 					
