@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use App\Http\Helpers\helpers;
 use Illuminate\Support\Facades\Storage;
+use League\CommonMark\Extension\CommonMark\Node\Inline\Strong;
 
 class EmployeeController extends Controller
 {
@@ -26,6 +27,32 @@ class EmployeeController extends Controller
         return view('allemployees',compact('employeeData')); 
         
     }
+
+   public function viewEmployeeData(string $id)
+    {
+        //URL decode the encrypted ID
+        $encryptedId = urldecode($id);
+
+        //Decrypt the ID safely
+        $employeeId = secure_decrypt($encryptedId);
+
+        //Validate decrypted ID
+        if (!$employeeId || !is_numeric($employeeId)) {
+            return redirect()->back()->with('error', 'Invalid Employee ID!');
+        }
+
+        //Fetch employee from database
+        $employee = Employee::find($employeeId);
+
+        // Check if employee exists
+        if (!$employee) {
+            return redirect()->back()->with('error', 'Employee not found!');
+        }
+
+        //Pass the employee data to the view
+        return view('showEmployee', compact('employee'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -91,7 +118,37 @@ class EmployeeController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        if(!empty($id))
+        {
+            $empId = secure_decrypt($id);
+
+            if ($empId && is_numeric($empId)) 
+            {
+                $employee=Employee::find($empId);
+                if($employee)
+                {
+                    $employeeName = ucwords($employee->full_name);
+                    $employeePicPath = $employee->profile_pic_path;
+                    
+                    if ($employee->delete()) 
+                    {
+                        if($employeePicPath!='profile_pictures/profile.jpg' && Storage::disk('public')->exists($employeePicPath))
+                        {
+                            storage::disk('public')->delete($employeePicPath);
+                        }
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => "{$employeeName} has been deleted successfully!",
+                        ]);
+                    }
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => "Employee Not Delete Invalid Employee.....!",
+        ]);
     }
 
     public function destroyMultiRecord(Request $request)
@@ -133,16 +190,15 @@ class EmployeeController extends Controller
             $employees = Employee::whereIn('id', $deleteIDDecrypt)->get();
 
             foreach ($employees as $emp) {
-                if (!empty($emp->profile_pic_path) && Storage::disk('public')->exists($emp->profile_pic_path)) {
+                if ($emp->profile_pic_path!='profile_pictures/profile.jpg' && Storage::disk('public')->exists($emp->profile_pic_path)) {
                     Storage::disk('public')->delete($emp->profile_pic_path);
                 }
             }
 
             Employee::whereIn('id', $deleteIDDecrypt)->delete();
-        }
-        
+        }     
 
-        //Bootstrap-Friendly Messagew
+        //Bootstrap-Friendly Message
         $messages = [];
         if ($deleteUserNo) {
             $messages[] = "<div class='alert alert-success mb-2'>Employee "

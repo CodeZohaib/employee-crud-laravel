@@ -51,13 +51,13 @@
 								<label for="checkbox1"></label>
 							</span>
 						</td>
-						<td>{{ $employee->full_name }}</td>
+						<td> <a href="{{ route('employee.viewData', urlencode(secure_encrypt($employee->id))) }}">{{  ucwords($employee->full_name) }}</td>
 						<td>{{ $employee->email }}</td>
 						<td>{{ $employee->address }}</td>
 						<td>{{ $employee->phone_no }}</td>
 						<td>
 							<a href="#editEmployeeModal" edit="{{ secure_encrypt($employee->id) }}" class="edit" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Edit">&#xE254;</i></a>
-							<a href="#deleteEmployeeModal"  delete="{{ secure_encrypt($employee->id) }}" class="delete" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
+							<a href="#deleteSingleEmployee"  delete="{{ secure_encrypt($employee->id) }}" class="empDeleteBtn" data-toggle="modal"><i class="material-icons" data-toggle="tooltip" title="Delete">&#xE872;</i></a>
 						</td>
 					</tr>
 					

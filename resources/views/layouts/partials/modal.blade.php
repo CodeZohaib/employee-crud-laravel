@@ -2,7 +2,6 @@
 <div id="addEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			
 			<form id="addEmployeeForm" action="{{ route('employee.store') }}" method="POST" enctype="multipart/form-data">
 				@csrf
 
@@ -146,7 +145,7 @@
 		</div>
 	</div>
 </div>
-<!-- Delete Modal HTML -->
+<!-- Delete Multiple Checkbox Modal HTML -->
 <div id="deleteEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
@@ -165,6 +164,33 @@
 				<div class="modal-footer">
 					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
 					<button class="btn btn-danger" id="deleteMultRecord">Delete</button>
+					
+				</div>
+			
+		</div>
+	</div>
+</div>
+
+
+<!-- Delete Single Employee Modal HTML -->
+<div id="deleteSingleEmployee" class="modal fade">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			
+				<div class="modal-header">						
+					<h4 class="modal-title">Delete Employee</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">					
+					<p>Are you sure you want to delete these Records?</p>
+					<p class="text-warning"><small>This action cannot be undone.</small></p>
+				</div>
+				<div id="deleteSingleEmployeeAlert">
+							{{-- Alert will show here --}}
+				</div>
+				<div class="modal-footer">
+					<button class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<button class="btn btn-danger" id="deleteSingleRecord">Delete</button>
 					
 				</div>
 			

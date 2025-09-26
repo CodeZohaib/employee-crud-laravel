@@ -118,11 +118,43 @@ $(document).ready(function(){
 		});
     });
 
-	 $('#addEmployeeModal,#deleteEmployeeModal').on('hidden.bs.modal', function () {
+	var emp_Delete_Id=null;
+
+	$('.empDeleteBtn').click(function(){
+		emp_Delete_Id=$(this).attr('delete');
+	});
+
+	$('#deleteSingleRecord').click(function(){
+		if(emp_Delete_Id!=null)
+		{
+			$.ajax({
+				url:'employee/'+emp_Delete_Id,
+				type:'DELETE',
+				data:{'employeeID':emp_Delete_Id},
+				success:function(response)
+				{
+					if(response.status=='success')
+					{
+						$('#deleteSingleEmployeeAlert').html(`<div class="alert alert-success"><center>${response.message}</center></div>`);
+					}
+					else
+					{
+						$('#deleteSingleEmployeeAlert').html(`<div class="alert alert-danger"><center>${response.message}</center></div>`);
+					}
+
+					shouldRefresh=true; // Set the flag to true to indicate a refresh is needed
+				}
+			})
+		}
+	})
+
+	$('#addEmployeeModal,#deleteEmployeeModal,#deleteSingleEmployee').on('hidden.bs.modal', function () {
 		if (shouldRefresh==true) {
 			location.reload(); // Refresh the page
 		}
 	});
+
+
 
 
 	
