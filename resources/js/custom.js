@@ -54,11 +54,11 @@ $(document).ready(function(){
 				{
 					checkboxVal=[];
 					shouldRefresh=true; // Set the flag to true to indicate a refresh is needed
-					$('#deleteEmployeeAlert').html(`<div class="alert alert-primary"><center>${response.message}</center></div>`);
+					$('#deleteEmployeeAlert').html(`<center>${response.message}</center>`);
 				}
 				else
 				{
-					$('#deleteEmployeeAlert').html(`<div class="alert alert-danger"><center>${response.message}</center></div>`);
+					$('#deleteEmployeeAlert').html(`<center>${response.message}</center>`);
 				}
 			}
 		});

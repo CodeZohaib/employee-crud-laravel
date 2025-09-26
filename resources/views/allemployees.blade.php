@@ -15,12 +15,14 @@
 					</div>
 					<div class="col-sm-6">
 						<a href="#addEmployeeModal" id="employeeModalbtn" class="btn btn-success" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add New Employee</span></a>
-						<a href="#deleteEmployeeModal" id="deleteEmployeeModalbtn" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>						
+						@if($employeeData!=null)
+						<a href="#deleteEmployeeModal" id="deleteEmployeeModalbtn" class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>Delete</span></a>	
+						@endif					
 					</div>
 				</div>
 			</div>
 			<?php //dd($employeeData) ?>
-			@if(!empty($employeeData))
+			@if($employeeData!=null)
 				
 			<table class="table table-striped table-hover">
 				<thead>
@@ -69,7 +71,10 @@
 				{{ $employeeData->links('pagination::bootstrap-4') }}
 			</div>
 			@else
-				<div class="alert alert-danger"><center>Employee Not Created.....!</center></div>
+				<div class="alert alert-info text-center" role="alert">
+					No employees found. Please add a new employee to get started.
+				</div>
+
 			@endif
 		</div>
 	</div>        

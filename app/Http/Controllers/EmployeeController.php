@@ -6,7 +6,9 @@ use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
-use APP\Http\Helpers\helpers;
+use Illuminate\Support\Facades\Log;
+use App\Http\Helpers\helpers;
+use Illuminate\Support\Facades\Storage;
 
 class EmployeeController extends Controller
 {
@@ -15,7 +17,12 @@ class EmployeeController extends Controller
      */
     public function index()
     {
-        $employeeData=Employee::orderby('id','desc')->paginate(5); 
+        $employeeData=Employee::orderby('id','desc')->paginate(15); 
+
+        // Check  record is empty or not
+        if ($employeeData->isEmpty()) {
+            $employeeData = null;
+        }
         return view('allemployees',compact('employeeData')); 
         
     }
@@ -87,99 +94,76 @@ class EmployeeController extends Controller
         //
     }
 
-    public function destroyMultiRecord()
+    public function destroyMultiRecord(Request $request)
     {
-        if(isset($_POST['deleteID']))
-        {
-            $deleteIDEncrypt = json_decode($_POST['deleteID'], true);
+        $deleteIDEncrypt = json_decode($request->input('deleteID'), true);
 
-            if(empty($deleteIDEncrypt) || !is_array($deleteIDEncrypt))
-            {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Please select at least one employee to delete.',
-                ]);
-            }
-
-            $deleteIDDecrypt = [];
-            $invalidUserNo = [];
-            $deleteUserNo=[];
-
-            foreach ($deleteIDEncrypt as $key => $value) 
-            {
-                try 
-                {
-                    $id = secure_decrypt($value);
-                    if ($id == null || !is_numeric($id)) 
-                    {
-                        $invalidUserNo[] = $key+1;
-                        continue;
-                    }
-
-                    $employeeExists=Employee::find($id);
-                    if(!$employeeExists)
-                    {
-                        $invalidUserNo[] = $key+1;
-                        continue;
-                    }
-
-                    $deleteIDDecrypt[] = $id;
-                    $deleteUserNo[] = $key + 1;
-                 }
-                catch (\Exception $e)
-                {
-                    $invalidUserNo[] = $key+1;
-                }
-            }
-            
-         
-            if (!empty($deleteIDDecrypt)) {
-                Employee::whereIn('id', $deleteIDDecrypt)->delete();
-            }
-
-            // ✅ Build Response Message
-            $messageParts = [];
-
-           
-
-            if (!empty($deleteUserNo) && is_array($deleteIDDecrypt)) 
-            {
-                if(count($deleteUserNo)===1 && count($invalidUserNo)===0)
-                {
-                    $messageParts[] = "<span style='color:green'>Employee Deleted successfully.</span>";
-                }
-                else
-                {
-                     $messageParts[] = "<span style='color:green'>Employee # " .implode(', ', $deleteUserNo) . " deleted successfully.</span>";
-                }
-            }
-
-            if (!empty($invalidUserNo)) 
-            {
-                if(count($invalidUserNo)===1 && count($deleteUserNo)===0)
-                {
-                    $messageParts[]= "<span style='color:red'>Employee could not be deleted (invalid).</span>";
-                }
-                else
-                {
-                    $messageParts[]= "<br><span style='color:red'>Employee # " .implode(', ', $invalidUserNo) ." could not be deleted (invalid).</span>";
-                }
-                
-            }
-
+        if (empty($deleteIDEncrypt) || !is_array($deleteIDEncrypt)) {
             return response()->json([
-                'status' => 'success',
-                'message' => implode(' ', $messageParts),
-                'deleted_users' => $deleteUserNo,
-                'invalid_users' => $invalidUserNo,
+                'status' => 'error',
+                'message' => "<div class='alert alert-danger'>Please select at least one employee to delete.</div>"
             ]);
-            
+        }
+
+        $deleteIDDecrypt = [];
+        $deleteUserNo = [];
+        $invalidUserNo = [];
+
+        foreach ($deleteIDEncrypt as $index => $encryptedId) {
+            try {
+                $id = secure_decrypt($encryptedId);
+
+                if (!$id || !is_numeric($id)) {
+                    $invalidUserNo[] = $index + 1;
+                    continue;
+                }
+
+                if (Employee::find($id)) {
+                    $deleteIDDecrypt[] = $id;
+                    $deleteUserNo[] = $index + 1;
+                } else {
+                    $invalidUserNo[] = $index + 1;
+                }
+            } catch (\Exception $e) {
+                $invalidUserNo[] = $index + 1;
+            }
+        }
+
+        if ($deleteIDDecrypt) {
+            $employees = Employee::whereIn('id', $deleteIDDecrypt)->get();
+
+            foreach ($employees as $emp) {
+                if (!empty($emp->profile_pic_path) && Storage::disk('public')->exists($emp->profile_pic_path)) {
+                    Storage::disk('public')->delete($emp->profile_pic_path);
+                }
+            }
+
+            Employee::whereIn('id', $deleteIDDecrypt)->delete();
+        }
+        
+
+        //Bootstrap-Friendly Messagew
+        $messages = [];
+        if ($deleteUserNo) {
+            $messages[] = "<div class='alert alert-success mb-2'>Employee "
+                . (count($deleteUserNo) > 1 ? 's #' : '')
+                . implode(', ', $deleteUserNo)
+                . " deleted successfully.</div>";
+        }
+
+        if ($invalidUserNo) {
+            $messages[] = "<div class='alert alert-danger'>Employee "
+                . (count($invalidUserNo) > 1 ? 's #' : '')
+                . implode(', ', $invalidUserNo)
+                . " could not be deleted (invalid).</div>";
         }
 
         return response()->json([
-          'status' => 'error',
-          'message' => 'Request missing deleteID parameter.'
-        ], 400);
-        
+            'status' => 'success',
+            'message' => implode('', $messages),
+            'deleted_users' => $deleteUserNo,
+            'invalid_users' => $invalidUserNo,
+        ]);
     }
+
 }
