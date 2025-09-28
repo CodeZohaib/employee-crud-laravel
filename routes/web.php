@@ -5,8 +5,9 @@ use Illuminate\Support\Facades\Route;
 use Phiki\Phast\Root;
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()->route('employee.index');
 });
+
 
 
 Route::resource('employee', EmployeeController::class);
