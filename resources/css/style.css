@@ -222,3 +222,27 @@ table.table .avatar {
 .modal form label {
 	font-weight: normal;
 }	
+
+
+.btn-action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;      /* small size */
+    height: 28px;     /* small size */
+    padding: 0;
+    margin: 0 2px;
+    border: none;
+    border-radius: 50%;
+    background: transparent;
+    transition: background 0.2s ease-in-out;
+}
+
+.btn-action i {
+    font-size: 16px;  /* small icon */
+    line-height: 1;
+}
+
+.btn-action:hover {
+    background: #f0f0f0;
+}

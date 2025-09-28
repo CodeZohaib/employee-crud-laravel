@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreEmployeeRequest;
+use App\Http\Requests\UpdateEmployeeRequest;
 use App\Models\Employee;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -70,7 +71,13 @@ class EmployeeController extends Controller
          if($request->hasFile('profile_picture'))
          {
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            // Save the path in the database or perform other operations
+         }
+         else
+         {
+            $path="profile_pictures/profile.jpg";
+         }
+
+         // Save the path in the database or perform other operations
             Employee::create([
                 'full_name' => $request->input('emp_name'),
                 'gender' => $request->input('emp_gender'),
@@ -86,7 +93,6 @@ class EmployeeController extends Controller
                 'success' => true,
                 'message' => 'Employee created successfully!',
             ]);
-         }
     }
 
     /**
@@ -102,15 +108,82 @@ class EmployeeController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        if(!empty($id))
+        {
+            $id = urldecode($id);
+            $id=secure_decrypt($id);
+            if($id && is_numeric($id))
+            {
+                $employee=Employee::find($id);
+                if($employee)
+                {
+                    return response()->json([
+                        'status' => 'success',
+                        'data' => $employee,
+                    ]);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => "We couldn't process your request. Please refresh the page and try again."
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEmployeeRequest $request, string $id)
     {
-        //
+    
+        if(!empty($id))
+        {
+            $id = urldecode($id);
+            $id=secure_decrypt($id);
+            if($id && is_numeric($id))
+            {
+                $employee=Employee::find($id);
+                if($employee)
+                {
+                    if($request->hasFile('profile_picture'))
+                    {
+                        if($employee->profile_pic_path!='profile_pictures/profile.jpg' && Storage::disk('public')->exists($employee->profile_pic_path))
+                        {
+                            Storage::disk('public')->delete($employee->profile_pic_path);
+                        }
+                        $path = $request->file('profile_picture')->store('profile_pictures', 'public');
+                    }
+                    else
+                    {
+                        $path=$employee->profile_pic_path;
+                    }
+
+                    // Update the path in the database or perform other operations
+                        $employee->update([
+                            'full_name' => $request->input('emp_name'),
+                            'gender' => $request->input('emp_gender'),
+                            'address' => $request->input('emp_address'),
+                            'email' => $request->input('emp_email'),
+                            'position' => $request->input('emp_position'),
+                            'phone_no' => $request->input('emp_phone'),
+                            'profile_pic_path' => $path
+                        ]);
+
+                        // JSON response for AJAX
+                        return response()->json([
+                            'status' => 'success',
+                            'message' => 'Employee updated successfully!',
+                        ]);
+                }
+            }
+        }
+
+        return response()->json([
+            'status' => 'error',
+            'message' => "We couldn't process your request. Please refresh the page and try again."
+        ]);
+
     }
 
     /**

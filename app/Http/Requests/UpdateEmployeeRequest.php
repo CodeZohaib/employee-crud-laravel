@@ -3,8 +3,9 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
-class StoreEmployeeRequest extends FormRequest
+class UpdateEmployeeRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,10 +22,14 @@ class StoreEmployeeRequest extends FormRequest
      */
     public function rules(): array
     {
+
+        $decoded = urldecode($this->route('employee')); // URL se decode
+        $employeeId= secure_decrypt($decoded);              // Secure decrypt
+
         return [
             'emp_name' => 'required|string|max:255',
             'emp_address' => 'required|string|max:500',
-            'emp_email' => 'required|email|unique:employees,email',
+            'emp_email' => ['required','email', Rule::unique('employees','email')->ignore($employeeId)],
             'emp_position' => 'required|string|max:255',
             'emp_phone' => 'required|string|max:20|regex:/^\+92\d{3}-\d{7}$/',
             'emp_gender' => ['required','in:Male,Female,Other'],
@@ -50,7 +55,7 @@ class StoreEmployeeRequest extends FormRequest
 
             'emp_email.required' => 'Employee email is required.',
             'emp_email.email' => 'Please enter a valid email address.',
-            'emp_email.unique' => 'This email is already registered.',
+             'emp_email.unique' => 'This email is already registered with another employee.',
 
             'emp_position.required' => 'Employee position is required.',
             'emp_position.string' => 'Position must be a valid string.',

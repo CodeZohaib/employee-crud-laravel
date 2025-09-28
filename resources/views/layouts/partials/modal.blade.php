@@ -75,71 +75,76 @@
 <div id="editEmployeeModal" class="modal fade">
 	<div class="modal-dialog">
 		<div class="modal-content">
-			<form>
+			<form id="editEmployeeForm" action="{{ route('employee.update', '__ID__') }}" method="POST" enctype="multipart/form-data">
+				@csrf
+				@method('PUT')
+
+				<x-input type="text"  :errorName="'editEmployee'" name="emp_id" class="form-control" hidden  />
 				<div class="modal-header">						
 					<h4 class="modal-title">Edit Employee</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 				</div>
-				<div class="modal-body">					
+				<div class="modal-body" id="editEmployeeBody">					
 					<div class="form-group">
 						<label>Name</label>
-						<input type="text" class="form-control" required>
+						<x-input type="text"  :errorName="'editEmployee'" name="emp_name" class="form-control" placeholder="Ente Employee Name....!"  />
 					</div>
 
 					<div class="form-group">
 						<label>Email</label>
-						<input type="email" class="form-control" required>
+						<x-input type="email" :errorName="'editEmployee'" name="emp_email" class="form-control" placeholder="Enter Employee Email....!" />
 					</div>
 
 					<div class="form-group">
 						<label>Address</label>
-						<textarea class="form-control" required></textarea>
+						<x-textarea name="emp_address" :errorName="'editEmployee'" class="my-custom-class" placeholder="Enter Address...!" />
+
 					</div>
 
 					<div class="form-group">
 						<label>Phone</label>
-						<input type="text" class="form-control" required>
+						<x-input type="text" :errorName="'editEmployee'" name="emp_phone" class="form-control" placeholder="Enter Phone Number.....!" />
 					</div>
 
 					<!-- Gender Field -->
 					<div class="form-group">
-						<label>Gender</label><br>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="gender" id="male" value="Male" required>
-							<label class="form-check-label" for="male">Male</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="gender" id="female" value="Female">
-							<label class="form-check-label" for="female">Female</label>
-						</div>
-						<div class="form-check form-check-inline">
-							<input class="form-check-input" type="radio" name="gender" id="other" value="Other">
-							<label class="form-check-label" for="other">Other</label>
-						</div>
+						<x-radio-group 
+							name="emp_gender" 
+							label="Gender"
+							:options="['Male', 'Female', 'Other']"
+							selected="Male"
+							:errorName="'editEmployee'"
+					    />
 					</div>
 
 					<!-- Position Field -->
-					<div class="form-group">
-						<label>Position</label>
-						<select class="form-control" required>
-							<option value="">Select Position</option>
-							<option value="Manager">Manager</option>
-							<option value="Developer">Developer</option>
-							<option value="Designer">Designer</option>
-							<option value="Sales">Sales</option>
-							<option value="Other">Other</option>
-						</select>
-					</div>
+					<x-select-field 
+						name="emp_position" 
+						label="Position" 
+						:options="config('constants.positions')" 
+						selected="{{ old('emp_position') }}" 
+						:errorName="'editEmployee'"
+					/>
+
+
 
 					<!-- Profile Picture Upload -->
 					<div class="form-group">
-						<label>Profile Picture</label>
-						<input type="file" class="form-control" accept="image/*" required>
+						<x-file-upload name="profile_picture" label="Profile Picture" :errorName="'editEmployee'" />
+						<img id="editProfilePreview" 
+							src="" 
+							alt="Current Profile Picture" 
+							style="max-width: 120px; margin-top: 10px; display: none; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.2);" />
 					</div>
 				</div>
+				<div id="editEmployeeAlert">
+							{{-- Alert will show here --}}
+				</div>
+
 				<div class="modal-footer">
-					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel">
-					<input type="submit" class="btn btn-info" value="Save">
+					 
+					<input type="button" class="btn btn-default" data-dismiss="modal" value="Cancel" />
+					<input type="submit" class="btn btn-success" value="Add" id="editEmployeeSubmit" />
 				</div>
 			</form>
 		</div>
